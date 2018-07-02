@@ -16,11 +16,8 @@ public:
 
 private slots:
     void on_actionLoad_triggered();
-
     void on_imagesCB_currentIndexChanged(int index);
-
     void on_layersCB_currentIndexChanged(int index);
-
     void on_deleteImageB_clicked();
 
 private:

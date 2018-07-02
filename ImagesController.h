@@ -11,7 +11,7 @@ public:
     void changeCurrentImage(int index, QLabel* imageConstainer, QLabel* sizeL, QComboBox* layersCB);
     void removeImage(QComboBox* imagesCB, QLabel* imageConstainer, QLabel* sizeL, QComboBox* layersCB);
 private:
-    bool block = false;
+    bool blocked = false;
     int currentImage = -1;
     std::vector<std::shared_ptr<Pyramid>> images;
 };

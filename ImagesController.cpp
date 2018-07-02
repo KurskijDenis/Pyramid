@@ -7,23 +7,20 @@ void ImagesController::changeLayer(int layer, QLabel* imageContainer, QLabel* si
 }
 void ImagesController::changeCurrentImage(int index, QLabel* imageContainer, QLabel* sizeL, QComboBox* layersCB)
 {
-    if (index >= (int)images.size() || block) return;
+    if (index >= (int)images.size() || blocked) return;
     currentImage = index;
-    images[index]->set(imageContainer, layersCB);
-    images[index]->showLayer(0, imageContainer, sizeL);
+    images[index]->set(imageContainer, layersCB, sizeL);
 }
 void ImagesController::removeImage(QComboBox* imagesCB, QLabel* imageContainer, QLabel* sizeL, QComboBox* layersCB)
 {
     if (currentImage > -1) {
-        block = true;
+        blocked = true;
         images.erase(images.begin() + currentImage);
         imagesCB->removeItem(currentImage);
-        block = false;
+        blocked = false;
         if (images.size() > 0)
-        {
-            currentImage = 0;
             changeCurrentImage(0, imageContainer, sizeL, layersCB);
-        } else {
+        else {
             currentImage = -1;
             imageContainer->clear();
             layersCB->clear();
@@ -35,9 +32,8 @@ void ImagesController::addImage(QString path, QComboBox* imagesCB, QLabel* image
 {
     std::shared_ptr<Pyramid> image(new Pyramid(path));
     if (!image->isValid()) return;
-    auto ind = path.lastIndexOf("/");
-    auto fileName = path.mid(ind + 1);
-    block = true;
+    auto fileName = path.mid(path.lastIndexOf("/") + 1);
+    blocked = true;
     size_t i = 0;
     for (; i < images.size(); i++)
     {
@@ -55,6 +51,6 @@ void ImagesController::addImage(QString path, QComboBox* imagesCB, QLabel* image
         imagesCB->addItem(fileName);
     }
     imagesCB->setCurrentIndex(i);
-    block = false;
+    blocked = false;
     changeCurrentImage(i, imageContainer, sizeL, layersCB);
 }

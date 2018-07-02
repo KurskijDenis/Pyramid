@@ -27,25 +27,26 @@ Pyramid& Pyramid::operator=(const Pyramid& source)
 }
 void Pyramid::showLayer(int layer, QLabel* imageContainer, QLabel* sizeL)
 {
-    if (layer >= (int)pyramid.size() || block) return;
+    if (layer >= (int)pyramid.size() || blocked) return;
     if (pyramid[layer] == nullptr) formLayer(layer);
     auto pixmap = QPixmap::fromImage(pyramid[layer]->image);
     auto size = pixmap.size();
     pixmap = pixmap.scaled(pyramid[0]->size());
     imageContainer->setPixmap(pixmap);
-    sizeL->setText(QString::fromStdString("Size: " + std::to_string(size.width()) + "x" + std::to_string(size.height())));
+    sizeL->setText(QString("Size: %1 x %2").arg(QString::number(size.width()), QString::number(size.height())));
 }
-void Pyramid::set(QLabel* imageContainer, QComboBox * layerCB)
+void Pyramid::set(QLabel* imageContainer, QComboBox * layerCB, QLabel* sizeL)
 {
     auto size = pyramid[0]->size();
     imageContainer->setMinimumWidth(size.width());
     imageContainer->setMinimumHeight(size.height());
-    block = true;
+    blocked = true;
     layerCB->clear();
     for (size_t i = 0; i < pyramid.size(); i++)
         layerCB->addItem(QString::fromStdString(std::to_string(i)));
-    block = false;
     layerCB->setCurrentIndex(0);
+    blocked = false;
+    showLayer(0, imageContainer, sizeL);
 }
 void Pyramid::init(const Pyramid& source)
 {

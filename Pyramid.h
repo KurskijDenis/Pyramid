@@ -1,6 +1,5 @@
 #ifndef PYRAMID_H
 #define PYRAMID_H
-#include <QImage>
 #include <QComboBox>
 #include <QLabel>
 #include <vector>
@@ -32,7 +31,7 @@ public:
     Pyramid(QString file);
 
     void showLayer(int layer, QLabel* imageContainer, QLabel* sizeL);
-    void set(QLabel* imageContainer, QComboBox* layerCB);
+    void set(QLabel* imageContainer, QComboBox* layerCB, QLabel* sizeL);
     int getDiagonalLength() const { return pyramid[0]->getDiagonalLength(); }
     inline int pyramidSize() const { return pyramid.size(); }
     inline bool isValid() const { return valid; }
@@ -42,7 +41,7 @@ private:
     void formLayer(size_t layer);
     void formPyramid(size_t countLayers);
     bool valid = true;
-    bool block = false;
+    bool blocked = false;
     std::vector<std::shared_ptr<ImageS>> pyramid;
 };
 
