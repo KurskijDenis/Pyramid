@@ -15,6 +15,9 @@ public:
     explicit ImagePyramid(QWidget *parent = 0);
     ~ImagePyramid();
 
+private slots:
+    void on_actionLoad_triggered();
+
 private:
     Ui::ImagePyramid *ui;
 };
