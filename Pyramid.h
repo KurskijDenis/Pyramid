@@ -39,6 +39,7 @@ public:
 private:
     void formNewImage(QImage& newImage, const QImage& oldImage);
     void init(const Pyramid& source);
+    void formLayer(size_t layer);
     void formPyramid(size_t countLayers);
     bool valid = true;
     bool block = false;

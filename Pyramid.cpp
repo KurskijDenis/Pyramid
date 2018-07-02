@@ -17,7 +17,7 @@ Pyramid::Pyramid(QString file)
         int countLayers = (int) std::max(1.0, (std::min(logw, logh) - log5) / log2);
         pyramid.resize(countLayers);
         pyramid[0].reset(new ImageS(image));
-        formPyramid(countLayers);
+      //  formPyramid(countLayers);
     }
 }
 Pyramid& Pyramid::operator=(const Pyramid& source)
@@ -28,6 +28,7 @@ Pyramid& Pyramid::operator=(const Pyramid& source)
 void Pyramid::showLayer(int layer, QLabel* imageContainer, QLabel* sizeL)
 {
     if (layer >= (int)pyramid.size() || block) return;
+    if (pyramid[layer] == nullptr) formLayer(layer);
     auto pixmap = QPixmap::fromImage(pyramid[layer]->image);
     auto size = pixmap.size();
     pixmap = pixmap.scaled(pyramid[0]->size());
@@ -54,6 +55,24 @@ void Pyramid::init(const Pyramid& source)
             pyramid[i].reset(source.pyramid[i]->copy());
         else
             pyramid[i] = nullptr;
+}
+void Pyramid::formLayer(size_t layer)
+{
+    size_t existingLayer = 1;
+    for (size_t i = layer; i > 0; i--)
+        if(pyramid[i - 1] != nullptr)
+        {
+            existingLayer = i;
+            break;
+        }
+    QImage prevLayer = pyramid[existingLayer - 1]->image;
+    for (size_t l = existingLayer; l < layer + 1; l++)
+    {
+        QImage image(prevLayer.width() / 2, prevLayer.height() / 2, QImage::Format_ARGB32 );
+        formNewImage(image, prevLayer);
+        prevLayer = image;
+    }
+    pyramid[layer].reset(new ImageS(prevLayer));
 }
 void Pyramid::formNewImage(QImage& newImage, const QImage& oldImage)
 {
@@ -88,6 +107,6 @@ void Pyramid::formPyramid(size_t countLayers)
         const QImage& prevLayer = pyramid[l - 1]->image;
         QImage image(prevLayer.width() / 2, prevLayer.height() / 2, QImage::Format_ARGB32 );
         formNewImage(image, prevLayer);
-        pyramid.push_back(std::shared_ptr<ImageS>(new ImageS(image)));
+        pyramid[l].reset(new ImageS(image));
     }
 }

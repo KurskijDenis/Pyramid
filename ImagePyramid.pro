@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         ImagePyramid.cpp \
-    Pyramid.cpp
+    Pyramid.cpp \
+    ImagesController.cpp
 
 HEADERS += \
         ImagePyramid.h \
-    Pyramid.h
+    Pyramid.h \
+    ImagesController.h
 
 FORMS += \
         ImagePyramid.ui
